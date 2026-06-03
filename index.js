@@ -9,6 +9,8 @@ const PORT = 4000;
 app.use(express.json());
 app.use(cors());
 
+app.use(express.static('public'))
+
 // CONFIGURACIÓN CRYPTO (8 bits = 1 carácter por bloque)
 const TAMANO_MOCHILA = 8; 
 

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Merkle-Hellman Crypto App</title>
+    <style>
+        :root {
+            --bg-color: #f8f9fa;
+            --card-bg: #ffffff;
+            --text-color: #212529;
+            --primary-color: #0d6efd;
+            --primary-hover: #0b5ed7;
+            --border-color: #dee2e6;
+            --success-color: #198754;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 1.8rem;
+            margin-bottom: 30px;
+            color: #343a40;
+        }
+
+        .tabs {
+            display: flex;
+            border-bottom: 2px solid var(--border-color);
+            margin-bottom: 20px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 12px;
+            background: none;
+            border: none;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            color: #6c757d;
+            transition: all 0.2s;
+        }
+
+        .tab-btn.active {
+            color: var(--primary-color);
+            border-bottom: 3px solid var(--primary-color);
+            margin-bottom: -2px;
+        }
+
+        .panel {
+            display: none;
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .panel.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        input[type="text"], input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 1rem;
+        }
+
+        button.action-btn {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        button.action-btn:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .result-box {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f1f3f5;
+            border-radius: 4px;
+            border-left: 4px solid var(--primary-color);
+            display: none;
+            word-break: break-all;
+        }
+
+        .result-box.success {
+            border-left-color: var(--success-color);
+        }
+
+        .key-display {
+            font-family: monospace;
+            background: #e9ecef;
+            padding: 8px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Demostración Merkle-Hellman</h1>
+
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('cifrar-panel')">Emisor (Cifrar)</button>
+            <button class="tab-btn" onclick="switchTab('descifrar-panel')">Receptor (Descifrar)</button>
+        </div>
+
+        <div id="cifrar-panel" class="panel active">
+            <h3>Obtener Clave Pública y Encriptar</h3>
+            <div class="form-group">
+                <button type="button" class="action-btn" style="background-color: #6c757d;" onclick="obtenerClavePublica()">
+                    Ver Clave Pública del Servidor
+                </button>
+                <div id="key-output" class="key-display" style="display: none;"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="texto-plano">Texto a encriptar:</label>
+                <input type="text" id="texto-plano" placeholder="Escribe un mensaje aquí...">
+            </div>
+            
+            <button class="action-btn" onclick="ejecutarCifrado()">Encriptar Texto</button>
+            
+            <div id="cifrar-resultado" class="result-box"></div>
+        </div>
+
+        <div id="descifrar-panel" class="panel">
+            <h3>Descifrar a partir del Payload</h3>
+            <div class="form-group">
+                <label for="payload-input">Payload Cifrado (Formato: [num, num, ...]):</label>
+                <input type="text" id="payload-input" placeholder="Ej: [245, 412, 189]">
+                <small style="color: #6c757d; display:block; margin-top:5px;">
+                    Pega el arreglo de números exacto que obtuviste al cifrar.
+                </small>
+            </div>
+            
+            <button class="action-btn" style="background-color: var(--success-color);" onclick="ejecutarDescifrado()">
+                Descifrar Payload
+            </button>
+            
+            <div id="descifrar-resultado" class="result-box success"></div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
